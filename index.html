@@ -3,17 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v6.5.1/css/all.css"
+    />
+
     <link rel="stylesheet" href="style.css" />
     <title>Home Budget</title>
   </head>
   <body>
     <div id="wrapper">
+      <button id="refresh">Restart calculation</button>
       <div id="logo"></div>
       <h1 id="title">You have <span id="moneyLeft">0</span> left</h1>
 
       <section id="money">
         <div id="moneyIn">
-          <label for="incomeType">Income type</label>
+          <label for="incomeType">Income</label>
           <input type="text" class="incomeType" />
           <label for="incomeValue">Amount</label>
           <input type="text" class="incomeValue" />
@@ -22,7 +28,7 @@
           <p>Total income <span class="totalIncome">0</span></p>
         </div>
         <div id="moneyOut">
-          <label for="outcomeType">Outcome type</label>
+          <label for="outcomeType">Outcome</label>
           <input type="text" class="outcomeType" />
           <label for="outcomeValue">Amount</label>
           <input type="text" class="outcomeValue" />

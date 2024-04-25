@@ -5,6 +5,11 @@ const outcomeList = document.querySelector(".outcomeList");
 const moneyLeft = document.querySelector("#moneyLeft");
 const totalIncome = document.querySelector(".totalIncome");
 const totalOutcome = document.querySelector(".totalOutcome");
+const refreshBtn = document.querySelector("#refresh");
+
+refreshBtn.addEventListener("click", () => {
+  window.location.reload();
+});
 
 const updateTotal = () => {
   let total = 0;
@@ -24,6 +29,9 @@ const updateTotal = () => {
   totalIncome.innerHTML = total;
   totalOutcome.innerHTML = total1;
   moneyLeft.innerHTML = total - total1;
+  if (moneyLeft <= 1) {
+    document.getElementById("title").style.color = "red";
+  }
 };
 
 addIncBtn.addEventListener("click", () => {
@@ -32,7 +40,7 @@ addIncBtn.addEventListener("click", () => {
 
   if (!isNaN(incomeValue) && incomeValue > 0) {
     const li = document.createElement("li");
-    li.innerHTML = `${incomeType}: <span class="incValue">${incomeValue}</span><button class="edit">Edit</button><button class="delete">Delete</button>`;
+    li.innerHTML = `${incomeType}: <span class="incValue">${incomeValue}</span><i class="fa-solid fa-pen-to-square edit"></i><i class="fa-regular fa-trash-can delete"></i>`;
 
     incomeList.appendChild(li);
     document.querySelector(".incomeType").value = "";
@@ -50,7 +58,7 @@ addOutBtn.addEventListener("click", () => {
 
   if (!isNaN(outcomeValue) && outcomeValue > 0) {
     const li = document.createElement("li");
-    li.innerHTML = `${outcomeType}: <span class="outValue">${outcomeValue}</span><button class="edit">Edit</button><button class="delete">Delete</button>`;
+    li.innerHTML = `${outcomeType}: <span class="outValue">${outcomeValue}</span><i class="fa-solid fa-pen-to-square edit"></i><i class="fa-regular fa-trash-can delete"></i>`;
 
     outcomeList.appendChild(li);
     document.querySelector(".outcomeType").value = "";
@@ -60,4 +68,50 @@ addOutBtn.addEventListener("click", () => {
   }
 
   updateTotal();
+});
+
+incomeList.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete")) {
+    e.target.parentElement.remove();
+    updateTotal();
+  } else if (e.target.classList.contains("edit")) {
+    const li = e.target.parentElement;
+    const incomeType = li.childNodes[0].nodeValue.trim().slice(0, -1);
+    const incomeValue = li.querySelector(".incValue").innerText;
+    li.innerHTML = `Name: <input type="text" value="${incomeType}" class="editType"/> Amount: <input type="text" value="${incomeValue}" class="editValue"/> 
+    <i class="fa-regular fa-floppy-disk save">`;
+  } else if (e.target.classList.contains("save")) {
+    const li = e.target.parentElement;
+    const newType = li.querySelector(".editType").value;
+    const newValue = parseFloat(li.querySelector(".editValue").value);
+
+    if (!isNaN(newValue) && newValue > 0) {
+      li.innerHTML = `${newType} <span class="incValue">${newValue}</span>
+      <i class="fa-solid fa-pen-to-square edit"> 
+      <i class="fa-regular fa-trash-can delete"></i>`;
+      updateTotal();
+    }
+  }
+});
+outcomeList.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete")) {
+    e.target.parentElement.remove();
+    updateTotal();
+  } else if (e.target.classList.contains("edit")) {
+    const li = e.target.parentElement;
+    const outcomeType = li.childNodes[0].nodeValue.trim().slice(0, -1);
+    const outcomeValue = li.querySelector(".outValue").innerText;
+    li.innerHTML = `<input type="text" value="${outcomeType}" class="editType"> Amount <input type="text" value="${outcomeValue}" class="editValue"> <i class="fa-regular fa-floppy-disk save"></i> `;
+  } else if (e.target.classList.contains("save")) {
+    const li = e.target.parentElement;
+    const newType = li.querySelector(".editType").value;
+    const newValue = parseFloat(li.querySelector(".editValue").value);
+
+    if (!isNaN(newValue) && newValue > 0) {
+      li.innerHTML = `${newType} <span class="incValue">${newValue}</span>
+      <i class="fa-solid fa-pen-to-square edit"></i>
+        <i class="fa-regular fa-trash-can delete"></i>`;
+      updateTotal();
+    }
+  }
 });

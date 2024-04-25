@@ -20,7 +20,11 @@
   margin: 0 auto;
 }
 #money {
-  background-image: url(/_06b9444d-0dbb-4680-ba53-90afee0ea43d.jpg);
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.7),
+      rgba(255, 255, 255, 0.7)
+    ),
+    url(/_06b9444d-0dbb-4680-ba53-90afee0ea43d.jpg);
   width: 1200px;
   height: 750px;
   margin: 0 auto;
@@ -30,10 +34,13 @@
 }
 
 #moneyIn {
-  position: relative;
   width: 50%;
-  z-index: 1;
 }
 #moneyOut {
   width: 50%;
+}
+
+.fa-pen-to-square {
+  font-size: 32px;
+  border: none;
 }
