@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Home Budget</title>
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="logo"></div>
+      <h1 id="title">You have <span id="moneyLeft">0</span> left</h1>
+
+      <section id="money">
+        <div id="moneyIn">
+          <label for="incomeType">Income type</label>
+          <input type="text" class="incomeType" />
+          <label for="incomeValue">Amount</label>
+          <input type="text" class="incomeValue" />
+          <button class="addIncome">Add</button>
+          <ul class="incomeList"></ul>
+          <p>Total income <span class="totalIncome">0</span></p>
+        </div>
+        <div id="moneyOut">
+          <label for="outcomeType">Outcome type</label>
+          <input type="text" class="outcomeType" />
+          <label for="outcomeValue">Amount</label>
+          <input type="text" class="outcomeValue" />
+          <button class="addOutcome">Add</button>
+          <ul class="outcomeList"></ul>
+          <p>Total spent <span class="totalOutcome">0</span></p>
+        </div>
+      </section>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
