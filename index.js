@@ -29,8 +29,10 @@ const updateTotal = () => {
   totalIncome.innerHTML = total;
   totalOutcome.innerHTML = total1;
   moneyLeft.innerHTML = total - total1;
-  if (moneyLeft <= 1) {
+  if (parseFloat(moneyLeft.innerText) < 0) {
     document.getElementById("title").style.color = "red";
+  } else {
+    document.getElementById("title").style.color = "black";
   }
 };
 
