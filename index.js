@@ -80,8 +80,7 @@ incomeList.addEventListener("click", (e) => {
     const li = e.target.parentElement;
     const incomeType = li.childNodes[0].nodeValue.trim().slice(0, -1);
     const incomeValue = li.querySelector(".incValue").innerText;
-    li.innerHTML = `Name: <input type="text" value="${incomeType}" class="editType"/> Amount: <input type="text" value="${incomeValue}" class="editValue"/> 
-    <i class="fa-regular fa-floppy-disk save">`;
+    li.innerHTML = `<input type="text" value="${incomeType}" class="editType"/> Amount: <input type="text" value="${incomeValue}" class="editValue"/> <i class="fa-regular fa-floppy-disk save">`;
   } else if (e.target.classList.contains("save")) {
     const li = e.target.parentElement;
     const newType = li.querySelector(".editType").value;
@@ -89,8 +88,9 @@ incomeList.addEventListener("click", (e) => {
 
     if (!isNaN(newValue) && newValue > 0) {
       li.innerHTML = `${newType} <span class="incValue">${newValue}</span>
-      <i class="fa-solid fa-pen-to-square edit"> 
+      <i class="fa-solid fa-pen-to-square edit"> </i>
       <i class="fa-regular fa-trash-can delete"></i>`;
+      e.target.parentElement.remove();
       updateTotal();
     }
   }
@@ -110,9 +110,9 @@ outcomeList.addEventListener("click", (e) => {
     const newValue = parseFloat(li.querySelector(".editValue").value);
 
     if (!isNaN(newValue) && newValue > 0) {
-      li.innerHTML = `${newType} <span class="incValue">${newValue}</span>
-      <i class="fa-solid fa-pen-to-square edit"></i>
-        <i class="fa-regular fa-trash-can delete"></i>`;
+      li.innerHTML = `${newType} <span class="outValue">${newValue}</span>
+      <i class="fa-solid fa-pen-to-square edit"> </i>
+      <i class="fa-regular fa-trash-can delete"></i>`;
       updateTotal();
     }
   }
