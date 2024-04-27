@@ -42,7 +42,9 @@ addIncBtn.addEventListener("click", () => {
 
   if (!isNaN(incomeValue) && incomeValue > 0) {
     const li = document.createElement("li");
-    li.innerHTML = `${incomeType}: <span class="incValue">${incomeValue}</span><i class="fa-solid fa-pen-to-square edit"></i><i class="fa-regular fa-trash-can delete"></i>`;
+    li.classList.add("listItems");
+    li.innerHTML = `<div>${incomeType}: <span class="incValue">${incomeValue}</span></div>
+    <div><i class="fa-regular fa-pen-to-square edit"></i><i class="fa-regular fa-trash-can delete"></i></div>`;
 
     incomeList.appendChild(li);
     document.querySelector(".incomeType").value = "";
@@ -60,7 +62,7 @@ addOutBtn.addEventListener("click", () => {
 
   if (!isNaN(outcomeValue) && outcomeValue > 0) {
     const li = document.createElement("li");
-    li.innerHTML = `${outcomeType}: <span class="outValue">${outcomeValue}</span><i class="fa-solid fa-pen-to-square edit"></i><i class="fa-regular fa-trash-can delete"></i>`;
+    li.innerHTML = `${outcomeType}: <span class="outValue">${outcomeValue}</span><i class="fa-regular fa-pen-to-square edit"></i><i class="fa-regular fa-trash-can delete"></i>`;
 
     outcomeList.appendChild(li);
     document.querySelector(".outcomeType").value = "";
@@ -74,11 +76,11 @@ addOutBtn.addEventListener("click", () => {
 
 incomeList.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
-    e.target.parentElement.remove();
+    e.target.parentElement.parentElement.remove();
     updateTotal();
   } else if (e.target.classList.contains("edit")) {
-    const li = e.target.parentElement;
-    const incomeType = li.childNodes[0].nodeValue.trim().slice(0, -1);
+    const li = e.target.parentElement.parentElement;
+    const incomeType = li.childNodes[1].nodeValue.trim().slice(0, -1);
     const incomeValue = li.querySelector(".incValue").innerText;
     li.innerHTML = `<input type="text" value="${incomeType}" class="editType"/> Amount: <input type="text" value="${incomeValue}" class="editValue"/> <i class="fa-regular fa-floppy-disk save">`;
   } else if (e.target.classList.contains("save")) {
@@ -87,10 +89,10 @@ incomeList.addEventListener("click", (e) => {
     const newValue = parseFloat(li.querySelector(".editValue").value);
 
     if (!isNaN(newValue) && newValue > 0) {
-      li.innerHTML = `${newType} <span class="incValue">${newValue}</span>
-      <i class="fa-solid fa-pen-to-square edit"> </i>
-      <i class="fa-regular fa-trash-can delete"></i>`;
-      e.target.parentElement.remove();
+      li.innerHTML = `<div>${newType} <span class="incValue">${newValue}</span></div>
+      <div><i class="fa-regular fa-pen-to-square edit"> </i>
+      <i class="fa-regular fa-trash-can delete"></i></div>`;
+      e.target.parentElement.parentElement.remove();
       updateTotal();
     }
   }
@@ -110,8 +112,8 @@ outcomeList.addEventListener("click", (e) => {
     const newValue = parseFloat(li.querySelector(".editValue").value);
 
     if (!isNaN(newValue) && newValue > 0) {
-      li.innerHTML = `${newType} <span class="outValue">${newValue}</span>
-      <i class="fa-solid fa-pen-to-square edit"> </i>
+      li.innerHTML = `<span class="outType">${newType}</span> <span class="outValue">${newValue}</span>
+      <i class="fa-regular fa-pen-to-square edit"> </i>
       <i class="fa-regular fa-trash-can delete"></i>`;
       updateTotal();
     }

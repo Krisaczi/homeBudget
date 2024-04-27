@@ -7,7 +7,7 @@
       rgba(255, 255, 255, 0.7),
       rgba(255, 255, 255, 0.7)
     ),
-    url(/_06b9444d-0dbb-4680-ba53-90afee0ea43d.jpg);
+    url(/_7947e10c-6b5e-4dfd-a0b0-fba10f367f1a.jpg);
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -27,7 +27,6 @@
   margin: 0 auto;
 }
 #money {
-  width: 1200px;
   height: 750px;
   margin: 0 auto;
 
@@ -41,12 +40,79 @@
   width: 50%;
 }
 
-.fa-pen-to-square {
-  font-size: 32px;
+.fa-regular {
+  font-size: 24px;
   border: none;
+  margin-right: 0;
 }
 
 #myChart {
   max-width: 200px;
   max-height: 200px;
+}
+
+input[type="text"] {
+  width: 25%;
+  padding: 10px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #868383;
+  border-radius: 4px;
+}
+
+input[type="text"]:focus {
+  background-color: #ebdcdc;
+  outline: none;
+}
+
+/* Style the submit button */
+input[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.incomeList,
+.outcomeList {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.listItems {
+  max-width: 90%;
+  padding: 8px 16px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #df1313;
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+}
+.listItems:hover {
+  background-color: #ececec;
+}
+.listItems:first-child {
+  background-color: #e9e9e9;
+  font-weight: bold;
+}
+
+.listItems:last-child {
+  border-bottom: none;
+  border-radius: 0 0 4px 4px;
+}
+
+.outValue,
+.outType,
+.incValue,
+.incType {
+  font-size: 24px;
+  max-width: 20%;
+  margin: 0;
+  padding: 0;
+  margin-right: 20px;
 }
