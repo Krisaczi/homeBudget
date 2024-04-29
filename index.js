@@ -40,19 +40,42 @@ refreshBtn.addEventListener("click", () => {
   window.location.reload();
 });
 
-//Dropdown creation
-const createDropdown = (options, defaultValue) => {
-  const select = document.createElement("select");
-  select.classList.add("editType");
-  options.forEach((option) => {
+function createIncomeDropdown(array) {
+  const selectElement = document.createElement("select");
+  selectElement.name = "incomeCategory";
+  selectElement.id = "incomeCategory";
+  selectElement.classList.add("listItems", "dropdown-item");
+
+  array.forEach((item) => {
     const optionElement = document.createElement("option");
-    optionElement.value = option;
-    optionElement.textContent = option;
-    select.appendChild(optionElement);
+    optionElement.value = item;
+    optionElement.textContent = item;
+    selectElement.appendChild(optionElement);
   });
-  select.value = defaultValue;
-  return select;
-};
+
+  return selectElement;
+}
+function createOutcomeDropdown(array) {
+  const selectElement = document.createElement("select");
+  selectElement.name = "expenseCategory";
+  selectElement.id = "expenseCategory";
+  selectElement.classList.add("listItems", "dropdown-item");
+
+  array.forEach((item) => {
+    const optionElement = document.createElement("option");
+    optionElement.value = item;
+    optionElement.textContent = item;
+    selectElement.appendChild(optionElement);
+  });
+
+  return selectElement;
+}
+
+const dropDownIncome = createIncomeDropdown(incomeTypes);
+document.querySelector(".dropDownIncome").appendChild(dropDownIncome);
+
+const dropDownOutcome = createOutcomeDropdown(outcomeTypes);
+document.querySelector(".dropDownOutcome").appendChild(dropDownOutcome);
 
 // Currency code updates
 
@@ -67,64 +90,65 @@ const updateCurrencyCodes = (newCurrencyCode) => {
 const updateTotal = () => {
   let incomeTotal = 0;
   const curr = document.querySelector(".currencyCode").textContent;
+  console.log(curr);
   Array.from(incomeList.children).forEach((li) => {
     const spanVal = li.querySelector(".incValue");
     if (spanVal) {
       incomeTotal += parseFloat(spanVal.innerText);
-      //spanVal.nextElementSibling.textContent = curr;   do usunięcia?
+      spanVal.nextElementSibling.innerText = curr;
     }
   });
+
   let outcomeTotal = 0;
   Array.from(outcomeList.children).forEach((li) => {
     const spanVal1 = li.querySelector(".outValue");
     if (spanVal1) {
       outcomeTotal += parseFloat(spanVal1.innerText);
-      // spanVal1.nextElementSibling.textContent = curr;    do usunięcia?
+      spanVal1.nextElementSibling.innerText = curr;
     }
   });
   totalIncome.innerHTML = `${incomeTotal} <span class="currencyCode">${curr}</span>`;
   totalOutcome.innerHTML = `${outcomeTotal} <span class="currencyCode">${curr}</span>`;
   moneyLeft.innerHTML = `${incomeTotal - outcomeTotal} <span class="currencyCode">${curr}</span>`;
-  if (parseFloat(moneyLeft.innerText) < 0) {
-    const title = document.querySelector("title");
-    title.innerHTML = `You have
-    <span id="moneyLeft">0 <span class="currencyCode">8</span></span> left`;
-    document.getElementById("title").style.color = "red";
-    console.log(title);
-  } else {
-    const title = document.querySelector("title");
-    title.innerHTML = `You have
-    <span id="moneyLeft">0 <span class="currencyCode">8</span></span> left`;
-    document.getElementById("title").style.color = "black";
-  }
+  const balance = incomeTotal - outcomeTotal;
+  const title = document.querySelector("#title");
+  title.textContent = `You have ${balance} ${curr} left`;
+  document.querySelector("#title").style.color = balance < 0 ? "red" : "black";
 };
 
 // Adding income item
 addIncBtn.addEventListener("click", () => {
-  const incomeType = document.querySelector("#incomeTypesDropdown").value;
+  const incomeType = document.querySelector("#incomeCategory").value;
   const incomeList = document.querySelector(".incomeList");
   const incomeValue = document.querySelector(".incomeValue").value;
 
+  console.log(incomeType);
   if (!isNaN(incomeValue) && incomeValue > 0) {
     const li = document.createElement("li");
     li.classList.add("listItems");
-    li.innerHTML = `<div>${incomeType}: <span class="incValue">${incomeValue}</span><span class="currencyCode"></span></div>
-    <div><i class="fa-regular fa-pen-to-square edit"></i><i class="fa-regular fa-trash-can delete"></i></div>`;
+    li.innerHTML = `
+    <div>${incomeType}: 
+      <span class="incValue">${incomeValue}</span>
+      <span class="currencyCode"></span>
+    </div>
+    <div>
+      <i class="fa-regular fa-pen-to-square edit"></i>
+      <i class="fa-regular fa-trash-can delete"></i>
+    </div>`;
 
     incomeList.appendChild(li);
-    document.querySelector("#incomeTypesDropdown").value = "Salary";
+    document.querySelector(".dropDownIncome").value = "";
     document.querySelector(".incomeValue").value = "";
   } else {
     alert("Please provide a valid amount");
   }
 
   updateTotal();
-  updateCurrencyCodes();
 });
 
 // Adding outcome item
 addOutBtn.addEventListener("click", () => {
-  const outcomeType = document.querySelector("#outcomeTypesDropdown").value;
+  const outcomeType = document.querySelector("#expenseCategory").value;
   const outcomeList = document.querySelector(".outcomeList");
   const outcomeValue = document.querySelector(".outcomeValue").value;
 
@@ -144,14 +168,13 @@ addOutBtn.addEventListener("click", () => {
 
     outcomeList.appendChild(li);
 
-    document.querySelector("#outcomeTypesDropdown").value = "Groceries";
+    document.querySelector(".dropDownOutcome").value = "Groceries";
     document.querySelector(".outcomeValue").value = "";
   } else {
     alert("Please provide a valid amount");
   }
 
   updateTotal();
-  updateCurrencyCodes();
 });
 
 // Income buttons and updates
@@ -166,7 +189,7 @@ incomeList.addEventListener("click", (e) => {
 
     const incomeValue = li.querySelector(".incValue").innerText;
 
-    const dropdown = createDropdown(incomeTypes, incomeType);
+    const dropdown = createIncomeDropdown(incomeTypes);
     const valueInput = document.createElement("input");
     valueInput.type = "text";
     valueInput.classList.add("editValue");
@@ -181,14 +204,20 @@ incomeList.addEventListener("click", (e) => {
     updateTotal();
   } else if (e.target.classList.contains("save")) {
     const li = e.target.closest("li");
-    const newType = li.querySelector(".editType").value;
+    const newType = li.querySelector("#incomeCategory").value;
     const newValue = parseFloat(li.querySelector(".editValue").value);
     updateTotal();
 
     if (!isNaN(newValue) && newValue > 0) {
-      li.innerHTML = `<div>${newType}: <span class="incValue">${newValue}</span></div>
-      <div><i class="fa-regular fa-pen-to-square edit"> </i>
-      <i class="fa-regular fa-trash-can delete"></i></div>`;
+      li.innerHTML = `
+      <div>${newType}: 
+        <span class="incValue">${newValue}</span>
+        <span class="currencyCode"></span>
+      </div>
+      <div>
+        <i class="fa-regular fa-pen-to-square edit"></i>
+        <i class="fa-regular fa-trash-can delete"></i>
+      </div>`;
       updateTotal();
     }
   }
@@ -205,7 +234,7 @@ outcomeList.addEventListener("click", (e) => {
       li.querySelector(".outValue").previousSibling.textContent;
     const outcomeValue = li.querySelector(".outValue").innerText;
 
-    const dropdown = createDropdown(outcomeTypes, outcomeType);
+    const dropdown = createOutcomeDropdown(outcomeTypes);
     const valueInput = document.createElement("input");
     valueInput.type = "text";
     valueInput.classList.add("editValue");
@@ -220,14 +249,20 @@ outcomeList.addEventListener("click", (e) => {
     updateTotal();
   } else if (e.target.classList.contains("save")) {
     const li = e.target.closest("li");
-    const newType = li.querySelector(".editType").value;
+    const newType = li.querySelector("#expenseCategory").value;
     const newValue = parseFloat(li.querySelector(".editValue").value);
     updateTotal();
 
     if (!isNaN(newValue) && newValue > 0) {
-      li.innerHTML = `<div>${newType}: <span class="outValue">${newValue}</span></div>
-      <div><i class="fa-regular fa-pen-to-square edit"> </i>
-      <i class="fa-regular fa-trash-can delete"></i></div>`;
+      li.innerHTML = `
+      <div>${newType}: 
+        <span class="outValue">${newValue}</span>
+        <span class="currencyCode"></span>
+      </div>
+      <div>
+        <i class="fa-regular fa-pen-to-square edit"></i>
+        <i class="fa-regular fa-trash-can delete"></i>
+      </div>`;
       updateTotal();
     }
   }
@@ -247,7 +282,7 @@ fetch("https://v6.exchangerate-api.com/v6/24f87096185677184d196bf1/latest/USD")
   })
   .then((data) => {
     const currList = Object.keys(data.conversion_rates);
-    const dropdown = document.getElementById("currency-codes-dropdown");
+    const dropdown = document.getElementById("currencyCodesDropdown");
     let curr = document.querySelector(".currencyCode");
 
     currList.forEach((el) => {
@@ -257,12 +292,69 @@ fetch("https://v6.exchangerate-api.com/v6/24f87096185677184d196bf1/latest/USD")
       dropdown.append(option);
     });
     dropdown.addEventListener("change", function () {
-      //curr.textContent = this.value;
+      curr.textContent = this.value;
       updateCurrencyCodes(this.value);
-      updateTotal();
+      //updateTotal();
     });
   })
 
   .catch((error) => {
     console.error("There has been a problem with your fetch operation:", error);
   });
+
+const incomeData = {
+  labels: incomeTypes, // This should be an array of categories
+  datasets: [
+    {
+      label: "Income Distribution",
+      data: [500, 300, 200, 12, 358, 154, 153, 684, 1235, 215, 12], // Replace this with an array of values for each category
+      backgroundColor: [
+        "red",
+        "yellow",
+        "orange",
+        "purple",
+        "green",
+        "violet",
+        "gray",
+        "brown",
+        "magenta",
+        "blue",
+        "pink",
+        "salmon",
+        "crimson",
+      ],
+      hoverOffset: 4,
+    },
+  ],
+};
+
+// Function to update the pie chart data
+function updateChartData(chart, incomeValues) {
+  chart.data.datasets[0].data = incomeValues;
+  chart.update();
+}
+
+// Function to create the pie chart
+function createPieChart(data) {
+  const ctx = document.getElementById("myPieChart").getContext("2d");
+  return new Chart(ctx, {
+    type: "pie",
+    data: data,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "bottom",
+        },
+        title: {
+          display: true,
+          text: "Income Distribution",
+        },
+      },
+    },
+  });
+}
+
+// Example usage:
+const myPieChart = createPieChart(incomeData);
+// Call updateChartData with the actual values to update the pie chart

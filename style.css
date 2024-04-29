@@ -116,3 +116,21 @@ input[type="submit"] {
   padding: 0;
   margin-right: 20px;
 }
+
+.inputBlock {
+  display: flex;
+
+  align-items: baseline;
+}
+.addButton {
+  height: 44px;
+}
+
+#currencyCodesDropdown {
+  width: 25%;
+  margin: 5px auto;
+}
+
+.currencySelection {
+  margin: 25px auto 10px auto;
+}
