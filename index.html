@@ -15,12 +15,31 @@
     <div id="wrapper">
       <button id="refresh">Restart calculation</button>
       <div id="logo"></div>
-      <h1 id="title">You have <span id="moneyLeft">0</span> left</h1>
+      <div class="currencySelection">Select your currency</div>
+      <select id="currency-codes-dropdown">
+        <option>Select a currency</option>
+      </select>
+      <h1 id="title">
+        You have
+        <span id="moneyLeft">0 <span class="currencyCode"></span></span> left
+      </h1>
 
       <section id="money">
         <div id="moneyIn">
-          <label for="incomeType">Income</label>
-          <input type="text" class="incomeType" />
+          <select id="incomeTypesDropdown">
+            <option class="incomeType">Salary</option>
+            <option class="incomeType">Business</option>
+            <option class="incomeType">Sales</option>
+            <option class="incomeType">Interests</option>
+            <option class="incomeType">Dividends</option>
+            <option class="incomeType">Rental</option>
+            <option class="incomeType">Capital Gains</option>
+            <option class="incomeType">Business</option>
+            <option class="incomeType">Royalty Income</option>
+            <option class="incomeType">Benefits</option>
+            <option class="incomeType">Freelance</option>
+            <option class="incomeType">Lottery</option>
+          </select>
           <label for="incomeValue">Amount</label>
           <input type="text" class="incomeValue" />
           <button class="addIncome">Add</button>
@@ -28,8 +47,19 @@
           <p>Total income <span class="totalIncome">0</span></p>
         </div>
         <div id="moneyOut">
-          <label for="outcomeType">Outcome</label>
-          <input type="text" class="outcomeType" />
+          <select id="outcomeTypesDropdown">
+            <option class="outcomeType">Groceries</option>
+            <option class="outcomeType">Rent</option>
+            <option class="outcomeType">Media</option>
+            <option class="outcomeType">Internet</option>
+            <option class="outcomeType">Mobile phones</option>
+            <option class="outcomeType">Life insurance</option>
+            <option class="outcomeType">Entertainment</option>
+            <option class="outcomeType">Dining out</option>
+            <option class="outcomeType">Gas</option>
+            <option class="outcomeType">Investments</option>
+            <option class="outcomeType">Loan repayment</option>
+          </select>
           <label for="outcomeValue">Amount</label>
           <input type="text" class="outcomeValue" />
           <button class="addOutcome">Add</button>
