@@ -10,15 +10,10 @@ const incomeTypes = [
   "Salary",
   "Business",
   "Sales",
-  "Interests",
   "Dividends",
-  "Rental",
-  "Capital Gains",
-  "Business",
+  "Rent",
   "Royalty Income",
-  "Benefits",
   "Freelance",
-  "Lottery",
   "Other",
 ];
 
@@ -85,12 +80,11 @@ const updateCurrencyCodes = (newCurrencyCode) => {
     element.textContent = newCurrencyCode;
   });
 };
-
+let salaryTotal = 0;
 //Total and H1 update
 const updateTotal = () => {
   let incomeTotal = 0;
   const curr = document.querySelector(".currencyCode").textContent;
-  console.log(curr);
   Array.from(incomeList.children).forEach((li) => {
     const spanVal = li.querySelector(".incValue");
     if (spanVal) {
@@ -114,20 +108,22 @@ const updateTotal = () => {
   const title = document.querySelector("#title");
   title.textContent = `You have ${balance} ${curr} left`;
   document.querySelector("#title").style.color = balance < 0 ? "red" : "black";
+  const incomeValues = [salaryTotal];
+  updateChartData(myPieChart, incomeValues);
 };
 
 // Adding income item
+
 addIncBtn.addEventListener("click", () => {
   const incomeType = document.querySelector("#incomeCategory").value;
   const incomeList = document.querySelector(".incomeList");
-  const incomeValue = document.querySelector(".incomeValue").value;
+  const incomeValue = parseFloat(document.querySelector(".incomeValue").value);
 
-  console.log(incomeType);
   if (!isNaN(incomeValue) && incomeValue > 0) {
     const li = document.createElement("li");
     li.classList.add("listItems");
     li.innerHTML = `
-    <div>${incomeType}: 
+    <div class="${incomeType}">${incomeType}: 
       <span class="incValue">${incomeValue}</span>
       <span class="currencyCode"></span>
     </div>
@@ -139,6 +135,11 @@ addIncBtn.addEventListener("click", () => {
     incomeList.appendChild(li);
     document.querySelector(".dropDownIncome").value = "";
     document.querySelector(".incomeValue").value = "";
+
+    if (incomeType === "Salary") {
+      salaryTotal += incomeValue;
+      console.log("Updated SalaryTotal:", salaryTotal);
+    }
   } else {
     alert("Please provide a valid amount");
   }
@@ -268,6 +269,12 @@ outcomeList.addEventListener("click", (e) => {
   }
 });
 
+// const spanVal1 = li.querySelector(".outValue");
+//     if (spanVal1) {
+//       outcomeTotal += parseFloat(spanVal1.innerText);
+//       spanVal1.nextElementSibling.innerText = curr;
+//     }
+
 // Currency codes API request
 
 const apiKey = "24f87096185677184d196bf1";
@@ -307,7 +314,7 @@ const incomeData = {
   datasets: [
     {
       label: "Income Distribution",
-      data: [500, 300, 200, 12, 358, 154, 153, 684, 1235, 215, 12], // Replace this with an array of values for each category
+      data: [salaryTotal], // Replace this with an array of values for each category
       backgroundColor: [
         "red",
         "yellow",
