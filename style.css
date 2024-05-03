@@ -1,5 +1,4 @@
 #wrapper {
-  width: 1200px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -53,8 +52,8 @@
 
 input[type="text"] {
   width: 25%;
-  padding: 10px;
-  margin: 5px 0 22px 0;
+  padding: 8px;
+  margin: 5px 0 5px 0;
   display: inline-block;
   border: none;
   background: #868383;
@@ -90,13 +89,12 @@ input[type="submit"] {
   border-bottom: 1px solid #df1313;
   display: flex;
   justify-content: space-between;
-
-  align-items: center;
+  align-items: baseline;
 }
 .listItems:hover {
   background-color: #ececec;
 }
-.listItems:first-child {
+.listItems:nth-child(2n) {
   background-color: #e9e9e9;
   font-weight: bold;
 }
@@ -110,11 +108,20 @@ input[type="submit"] {
 .outType,
 .incValue,
 .incType {
-  font-size: 24px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 18px;
   max-width: 20%;
   margin: 0;
   padding: 0;
-  margin-right: 20px;
+}
+
+.listItem {
+  width: 75%;
+  display: flex;
+  justify-content: stretch;
+}
+.currencyCode {
+  margin-left: 20px;
 }
 
 .inputBlock {
@@ -133,4 +140,9 @@ input[type="submit"] {
 
 .currencySelection {
   margin: 25px auto 10px auto;
+}
+
+#myPieChart {
+  width: 300px;
+  height: 300px;
 }

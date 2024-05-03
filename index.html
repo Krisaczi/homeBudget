@@ -30,35 +30,32 @@
         You have
         <span id="moneyLeft">0 <span class="currencyCode"></span></span> left
       </h1>
-
       <section id="money">
         <div id="moneyIn">
+          <p>Total income <span class="totalIncome">0</span></p>
           <div class="inputBlock">
             <div class="dropDownIncome"></div>
             <label for="incomeValue">Amount &nbsp;</label>
             <input type="text" class="incomeValue" />
-
             <button class="addIncome btn btn-success addButton">
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>
           <ul class="incomeList list-group list-group-flush"></ul>
-          <p>Total income <span class="totalIncome">0</span></p>
-
-          <canvas id="myPieChart"></canvas>
         </div>
+        <canvas id="myPieChart" style="width: 300px; height: 300px"></canvas>
+        <canvas id="myPieChart2" style="width: 300px; height: 300px"></canvas>
         <div id="moneyOut">
+          <p>Total spent <span class="totalOutcome">0</span></p>
           <div class="inputBlock">
             <div class="dropDownOutcome"></div>
             <label for="outcomeValue">Amount &nbsp; </label>
             <input type="text" class="outcomeValue" />
-
             <button class="addOutcome btn btn-success addButton">
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>
           <ul class="outcomeList list-group list-group-flush"></ul>
-          <p>Total spent <span class="totalOutcome">0</span></p>
         </div>
       </section>
     </div>
