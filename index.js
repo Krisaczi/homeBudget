@@ -35,14 +35,14 @@ let incomeTypes = [
 ];
 
 const outcomeTypes = [
-  "Groceries",
-  "Rent",
-  "Media",
-  "Internet",
-  "Phones",
-  "Entertainment",
-  "Diningout",
-  "Car",
+  { type: "Groceries", total: groceriesTotal },
+  { type: "Rent", total: rentTotal },
+  { type: "Media", total: mediaTotal },
+  { type: "Internet", total: internetTotal },
+  { type: "Phones", total: PhonesTotal },
+  { type: "Entertainment", total: entertainmentTotal },
+  { type: "Diningout", total: diningOutTotal },
+  { type: "Car", total: carTotal },
 ];
 //Reset calculation
 refreshBtn.addEventListener("click", () => {
@@ -75,8 +75,8 @@ function createOutcomeDropdown(array) {
 
   array.forEach((item) => {
     const optionElement = document.createElement("option");
-    optionElement.value = item;
-    optionElement.textContent = item;
+    optionElement.value = item.type;
+    optionElement.textContent = item.type;
     selectElement.appendChild(optionElement);
   });
 
@@ -123,29 +123,11 @@ const updateTotal = () => {
   moneyLeft.innerHTML = `${incomeTotal - outcomeTotal} <span class="currencyCode">${curr}</span>`;
   const balance = incomeTotal - outcomeTotal;
   const title = document.querySelector("#title");
-  title.textContent = `You have ${balance} ${curr} left`;
+  title.innerHTML =
+    balance < 0
+      ? `Stop spending money. You have nothing left!!! <br> Your current budget is ${balance} <span class="currencyCode">${curr}</span>`
+      : `You have ${balance} ${curr} left`;
   document.querySelector("#title").style.color = balance < 0 ? "red" : "black";
-  // const incomeValues = [
-  //   salaryTotal,
-  //   businessTotal,
-  //   salesTotal,
-  //   dividendsTotal,
-  //   rentIncomeTotal,
-
-  //   freelanceTotal,
-  //   otherTotal,
-  // ];
-  // const outcomeValues = [
-  //   groceriesTotal,
-  //   rentTotal,
-  //   mediaTotal,
-  //   internetTotal,
-  //   PhonesTotal,
-  //   entertainmentTotal,
-  //   diningOutTotal,
-  //   carTotal,
-  // ];
-  updateChartData(myPieChart, incomeTypes);
 };
 
 // Adding income item
@@ -172,40 +154,8 @@ addIncBtn.addEventListener("click", () => {
     document.querySelector(".dropDownIncome").value = "";
     document.querySelector(".incomeValue").value = "";
 
-    if (incomeType === "Salary") {
-      salaryTotal += incomeValue;
-    }
-    if (incomeType === "Business") {
-      businessTotal += incomeValue;
-    }
-    if (incomeType === "Sales") {
-      salesTotal += incomeValue;
-    }
-    if (incomeType === "Dividends") {
-      dividendsTotal += incomeValue;
-    }
-    if (incomeType === "RentIncome") {
-      rentIncomeTotal += incomeValue;
-    }
-
-    if (incomeType === "Freelance") {
-      freelanceTotal += incomeValue;
-    }
-    if (incomeType === "Other") {
-      otherTotal += incomeValue;
-    }
-
     updateTotal();
-
-    updateChartData(myPieChart, [
-      salaryTotal,
-      businessTotal,
-      salesTotal,
-      dividendsTotal,
-      rentIncomeTotal,
-      freelanceTotal,
-      otherTotal,
-    ]);
+    updateChartData();
   } else {
     alert("Please provide a valid amount");
   }
@@ -215,40 +165,13 @@ addIncBtn.addEventListener("click", () => {
 incomeList.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
     const li = e.target.closest("li");
-    const value = parseFloat(li.querySelector(".incValue").innerText);
-    const incomeType = li.querySelector("div").classList[0];
-
-    if (incomeType === "Salary") {
-      salaryTotal -= value;
-    } else if (incomeType === "Business") {
-      businessTotal -= value;
-    } else if (incomeType === "Sales") {
-      salesTotal -= value;
-    } else if (incomeType === "Dividends") {
-      dividendsTotal -= value;
-    } else if (incomeType === "RentIncome") {
-      rentIncomeTotal -= value;
-    } else if (incomeType === "Freelance") {
-      freelanceTotal -= value;
-    } else if (incomeType === "Other") {
-      otherTotal -= value;
-    }
-
     li.remove();
     updateTotal();
-    updateChartData(myPieChart, [
-      salaryTotal,
-      businessTotal,
-      salesTotal,
-      dividendsTotal,
-      rentIncomeTotal,
-      freelanceTotal,
-      otherTotal,
-    ]);
   } else if (e.target.classList.contains("edit")) {
     const li = e.target.closest("li");
     originalType = li.querySelector("div").classList[0];
     originalValue = parseFloat(li.querySelector(".incValue").innerText);
+
     const incomeValue = li.querySelector(".incValue").innerText;
     const dropdown = createIncomeDropdown(incomeTypes);
     const valueInput = document.createElement("input");
@@ -262,50 +185,10 @@ incomeList.addEventListener("click", (e) => {
     li.appendChild(dropdown);
     li.appendChild(valueInput);
     li.appendChild(saveIcon);
-    updateTotal();
-    // updateChartData(myPieChart, [
-    //   salaryTotal,
-    //   businessTotal,
-    //   salesTotal,
-    //   dividendsTotal,
-    //   rentIncomeTotal,
-    //   freelanceTotal,
-    //   otherTotal,
-    // ]);
-    // updateChartData(
-    //   myPieChart,
-    //   incomeTypes.map((type) => type.total)
-    // );
   } else if (e.target.classList.contains("save")) {
     const li = e.target.closest("li");
     const newType = li.querySelector("#incomeCategory").value;
     const newValue = parseFloat(li.querySelector(".editValue").value);
-
-    // Find the income type objects
-    const originalTypeObject = incomeTypes.find(
-      (type) => type.type === originalType
-    );
-    const newTypeObject = incomeTypes.find((type) => type.type === newType);
-
-    // Check if the original type is different from the new type before subtracting
-    if (originalType !== newType) {
-      originalTypeObject.total -= originalValue;
-      newTypeObject.total += newValue;
-    } else {
-      // If the type hasn't changed, only update the total if the value has changed
-      if (newValue !== originalValue) {
-        originalTypeObject.total -= originalValue;
-        originalTypeObject.total += newValue;
-      }
-    }
-
-    // Ensure no negative totals
-    if (originalTypeObject.total < 0) {
-      originalTypeObject.total = 0;
-    }
-    if (newTypeObject.total < 0) {
-      newTypeObject.total = 0;
-    }
 
     // Update the DOM and chart only if the new value is valid
     if (!isNaN(newValue) && newValue >= 0) {
@@ -319,19 +202,6 @@ incomeList.addEventListener("click", (e) => {
       <i class="fa-regular fa-trash-can delete"></i>
     </div>`;
       updateTotal();
-      // updateChartData(
-      //   myPieChart,
-      //   incomeTypes.map((type) => type.total)
-      // );
-      updateChartData(myPieChart, [
-        salaryTotal,
-        businessTotal,
-        salesTotal,
-        dividendsTotal,
-        rentIncomeTotal,
-        freelanceTotal,
-        otherTotal,
-      ]);
     }
   }
 });
@@ -347,10 +217,8 @@ addOutBtn.addEventListener("click", () => {
     li.classList.add("listItems");
 
     li.innerHTML = `
-    <div class="${outcomeType} listItem">${outcomeType}: 
-      </div>
-      <div>
-    <span class="outValue">${outcomeValue}</span>
+    <div class="${outcomeType}">${outcomeType}: 
+      <span class="outValue">${outcomeValue}</span>
       <span class="currencyCode"></span>
     </div>
     <div>
@@ -363,33 +231,7 @@ addOutBtn.addEventListener("click", () => {
     document.querySelector(".dropDownOutcome").value = "Groceries";
     document.querySelector(".outcomeValue").value = "";
 
-    if (outcomeType === "Groceries") {
-      groceriesTotal += outcomeValue;
-    }
-    if (outcomeType === "Rent") {
-      rentTotal += outcomeValue;
-    }
-    if (outcomeType === "Media") {
-      mediaTotal += outcomeValue;
-    }
-    if (outcomeType === "Internet") {
-      internetTotal += outcomeValue;
-    }
-    if (outcomeType === "Phones") {
-      PhonesTotal += outcomeValue;
-    }
-    if (outcomeType === "Entertainment") {
-      entertainmentTotal += outcomeValue;
-    }
-    if (outcomeType === "Diningout") {
-      diningOutTotal += outcomeValue;
-    }
-    if (outcomeType === "Car") {
-      carTotal += outcomeValue;
-    }
-
     updateTotal();
-    updateChartData(myPieChart2, outcomeValues);
   } else {
     alert("Please provide a valid amount");
   }
@@ -399,30 +241,9 @@ addOutBtn.addEventListener("click", () => {
 outcomeList.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
     const li = e.target.closest("li");
-    const value = parseFloat(li.querySelector(".outValue").innerText);
-    const outcomeType = li.querySelector("div").classList[0];
-
-    if (outcomeType === "Groceries") {
-      groceriesTotal -= value;
-    } else if (outcomeType === "Rent") {
-      rentTotal -= value;
-    } else if (outcomeType === "Media") {
-      mediaTotal -= value;
-    } else if (outcomeType === "Internet") {
-      internetTotal -= value;
-    } else if (outcomeType === "Phones") {
-      PhonesTotal -= value;
-    } else if (outcomeType === "Entertainment") {
-      entertainmentTotal -= value;
-    } else if (outcomeType === "Diningout") {
-      diningOutTotal -= value;
-    } else if (outcomeType === "Car") {
-      carTotal -= value;
-    }
 
     li.remove();
     updateTotal();
-    updateChartData(myPieChart, outcomeTypes);
   } else if (e.target.classList.contains("edit")) {
     const li = e.target.closest("li");
     const outcomeType =
@@ -441,16 +262,11 @@ outcomeList.addEventListener("click", (e) => {
     li.appendChild(dropdown);
     li.appendChild(valueInput);
     li.appendChild(saveIcon);
-    updateTotal();
-
-    updateChartData(myPieChart2, outcomeValues);
   } else if (e.target.classList.contains("save")) {
     const li = e.target.closest("li");
     const newType = li.querySelector("#expenseCategory").value;
     const newValue = parseFloat(li.querySelector(".editValue").value);
     updateTotal();
-
-    updateChartData(myPieChart2, outcomeValues);
 
     if (!isNaN(newValue) && newValue > 0) {
       li.innerHTML = `
@@ -463,8 +279,6 @@ outcomeList.addEventListener("click", (e) => {
         <i class="fa-regular fa-trash-can delete"></i>
       </div>`;
       updateTotal();
-
-      updateChartData(myPieChart2, outcomeValues);
     }
   }
 });
@@ -502,143 +316,3 @@ fetch("https://v6.exchangerate-api.com/v6/24f87096185677184d196bf1/latest/USD")
   .catch((error) => {
     console.error("There has been a problem with your fetch operation:", error);
   });
-
-// Income Pie Charts
-const incomeData = {
-  labels: incomeTypes.map((type) => type.type), // This should be an array of categories
-  datasets: [
-    {
-      label: "Income Distribution",
-      data: [
-        incomeTypes.map((type) => type.total),
-        // salaryTotal,
-        // businessTotal,
-        // salesTotal,
-        // dividendsTotal,
-        // rentIncomeTotal,
-        // freelanceTotal,
-        // otherTotal,
-      ], // Replace this with an array of values for each category
-      backgroundColor: [
-        "red",
-        "yellow",
-        "orange",
-        "purple",
-        "green",
-        "violet",
-        "gray",
-        "brown",
-        "magenta",
-        "blue",
-        "pink",
-        "salmon",
-        "crimson",
-      ],
-      hoverOffset: 4,
-    },
-  ],
-};
-
-// Function to update the pie chart data
-function updateChartData(chart, incomeTypes) {
-  chart.data.labels = incomeTypes.map((type) => type.type);
-  chart.data.datasets[0].data = incomeTypes.map((type) => type.total);
-  chart.update();
-}
-
-// Function to create the pie chart
-function createPieChart(data, canvasId) {
-  const ctx = document.getElementById(canvasId).getContext("2d");
-  return new Chart(ctx, {
-    type: "pie",
-    data: data,
-    options: {
-      responsive: false,
-      maintainAspectRatio: false, // Add this to maintain the aspect ratio
-      aspectRatio: 2, // Adjust this value to scale the size of the pie chart
-      plugins: {
-        legend: {
-          position: "bottom",
-        },
-        title: {
-          display: true,
-          text: "Income Distribution",
-        },
-      },
-    },
-  });
-}
-
-// Example usage:
-const myPieChart = createPieChart(incomeData, "myPieChart");
-// Call updateChartData with the actual values to update the pie chart
-
-// Outcome Pie Chart
-
-const outcomeData = {
-  labels: outcomeTypes, // This should be an array of categories
-  datasets: [
-    {
-      label: "Outcome Distribution",
-      data: [
-        groceriesTotal,
-        rentTotal,
-        mediaTotal,
-        internetTotal,
-        PhonesTotal,
-        entertainmentTotal,
-        diningOutTotal,
-        carTotal,
-      ], // Replace this with an array of values for each category
-      backgroundColor: [
-        "red",
-        "yellow",
-        "orange",
-        "purple",
-        "green",
-        "violet",
-        "gray",
-        "brown",
-        "magenta",
-        "blue",
-        "pink",
-        "salmon",
-        "crimson",
-      ],
-      hoverOffset: 4,
-    },
-  ],
-};
-
-// Function to update the pie chart data
-function updateChartData(chart, outcomeValue) {
-  chart.data.datasets[0].data = outcomeValue;
-  chart.update();
-}
-
-// Function to create the pie chart
-function createPieChart(data, canvasId) {
-  const ctx = document.getElementById(canvasId).getContext("2d");
-  return new Chart(ctx, {
-    type: "pie",
-    data: data,
-    options: {
-      responsive: false,
-      maintainAspectRatio: false, // Add this to maintain the aspect ratio
-      aspectRatio: 2, // Adjust this value to scale the size of the pie chart
-      plugins: {
-        legend: {
-          position: "bottom",
-        },
-        title: {
-          display: true,
-          text: "Outcome Distribution",
-        },
-      },
-    },
-  });
-}
-
-// Example usage:
-const myPieChart2 = createPieChart(outcomeData, "myPieChart2");
-// Call updateChartData with the actual values to update the pie chart
