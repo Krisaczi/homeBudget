@@ -142,8 +142,10 @@ addIncBtn.addEventListener("click", () => {
     li.classList.add("listItems");
     li.innerHTML = `
     <div class="${incomeType}">${incomeType}: 
-      <span class="incValue">${incomeValue}</span>
-      <span class="currencyCode"></span>
+    </div>
+    <div class="incomeAmount">
+    <span class="incValue">${incomeValue}</span>
+    <span class="currencyCode"></span>
     </div>
     <div>
       <i class="fa-regular fa-pen-to-square edit"></i>
