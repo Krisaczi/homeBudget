@@ -22,44 +22,43 @@
         Restart calculation
       </button>
       <div id="logo"></div>
-      <h3 class="currencySelection">Select your currency</h3>
-      <select id="currencyCodesDropdown">
+      <h3 class="currency-selection">Select your currency</h3>
+      <select id="currency-codes-dropdown">
         <option value=""></option>
       </select>
       <h1 id="title">
         You have
-        <span id="moneyLeft">0 <span class="currencyCode"></span></span> left
+        <span id="money-left">0 <span class="currency-code"></span></span> left
       </h1>
       <section id="money">
-        <div id="moneyIn">
-          <p>Total income: <span class="totalIncome">0</span></p>
-          <div class="inputBlock">
-            <div class="dropDownIncome"></div>
-            <label for="incomeValue">Amount &nbsp;</label>
-            <input type="text" class="incomeValue" />
-            <button class="addIncome btn btn-success addButton">
+        <div id="money-in">
+          <p>Total income: <span class="total-income">0</span></p>
+          <div class="input-block">
+            <div class="drop-down-income"></div>
+            <label for="income-value">Amount &nbsp;</label>
+            <input type="text" class="income-value" />
+            <button class="add-income btn btn-success addButton">
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>
-          <ul class="incomeList list-group list-group-flush"></ul>
+          <ul class="income-list list-group list-group-flush"></ul>
         </div>
 
-        <div id="moneyOut">
-          <p>Total spent: <span class="totalOutcome">0</span></p>
-          <div class="inputBlock">
-            <div class="dropDownOutcome"></div>
-            <label for="outcomeValue">Amount &nbsp; </label>
-            <input type="text" class="outcomeValue" />
-            <button class="addOutcome btn btn-success addButton">
+        <div id="money-out">
+          <p>Total spent: <span class="total-outcome">0</span></p>
+          <div class="input-block">
+            <div class="drop-down-outcome"></div>
+            <label for="outcome-value">Amount &nbsp; </label>
+            <input type="text" class="outcome-value" />
+            <button class="add-outcome btn btn-success addButton">
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>
-          <ul class="outcomeList list-group list-group-flush"></ul>
+          <ul class="outcome-list list-group list-group-flush"></ul>
         </div>
       </section>
-      <canvas id="budgetChart" width="400" height="400"></canvas>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="index.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
