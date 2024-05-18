@@ -1,11 +1,13 @@
-const addIncBtn = document.querySelector(".addIncome");
-const addOutBtn = document.querySelector(".addOutcome");
-const incomeList = document.querySelector(".incomeList");
-const outcomeList = document.querySelector(".outcomeList");
-const moneyLeft = document.querySelector("#moneyLeft");
-const totalIncome = document.querySelector(".totalIncome");
-const totalOutcome = document.querySelector(".totalOutcome");
+const addIncBtn = document.querySelector(".add-income");
+const addOutBtn = document.querySelector(".add-outcome");
+const incomeList = document.querySelector(".income-list");
+const outcomeList = document.querySelector(".outcome-list");
+const moneyLeft = document.querySelector("#money-left");
+const totalIncome = document.querySelector(".total-income");
+const totalOutcome = document.querySelector(".total-outcome");
 const refreshBtn = document.querySelector("#refresh");
+let isEditing = false;
+
 let salaryTotal = 0;
 let businessTotal = 0;
 let salesTotal = 0;
@@ -52,9 +54,9 @@ refreshBtn.addEventListener("click", () => {
 // Income Dropdown
 function createIncomeDropdown(array) {
   const selectElement = document.createElement("select");
-  selectElement.name = "incomeCategory";
-  selectElement.id = "incomeCategory";
-  selectElement.classList.add("listItems", "dropdown-item");
+  selectElement.name = "income-category";
+  selectElement.id = "income-category";
+  selectElement.classList.add("list-items", "dropdown-item");
 
   array.map((item) => {
     const optionElement = document.createElement("option");
@@ -69,9 +71,9 @@ function createIncomeDropdown(array) {
 //Outcome Dropdown
 function createOutcomeDropdown(array) {
   const selectElement = document.createElement("select");
-  selectElement.name = "expenseCategory";
-  selectElement.id = "expenseCategory";
-  selectElement.classList.add("listItems", "dropdown-item");
+  selectElement.name = "expense-category";
+  selectElement.id = "expense-category";
+  selectElement.classList.add("list-items", "dropdown-item");
 
   array.forEach((item) => {
     const optionElement = document.createElement("option");
@@ -84,26 +86,26 @@ function createOutcomeDropdown(array) {
 }
 
 const dropDownIncome = createIncomeDropdown(incomeTypes);
-document.querySelector(".dropDownIncome").appendChild(dropDownIncome);
+document.querySelector(".drop-down-income").appendChild(dropDownIncome);
 
 const dropDownOutcome = createOutcomeDropdown(outcomeTypes);
-document.querySelector(".dropDownOutcome").appendChild(dropDownOutcome);
+document.querySelector(".drop-down-outcome").appendChild(dropDownOutcome);
 
 // Currency code updates
 
-const updateCurrencyCodes = (newCurrencyCode) => {
-  const currencyCodeElements = document.querySelectorAll(".currencyCode");
+const updateCurrencyCodes = (newcurrencCode) => {
+  const currencyCodeElements = document.querySelectorAll(".currency-code");
   currencyCodeElements.forEach((element) => {
-    element.textContent = newCurrencyCode;
+    element.textContent = newcurrencCode;
   });
 };
 
 //Total and H1 update
 const updateTotal = () => {
   let incomeTotal = 0;
-  const curr = document.querySelector(".currencyCode").textContent;
+  const curr = document.querySelector(".currency-code").textContent;
   Array.from(incomeList.children).forEach((li) => {
-    const spanVal = li.querySelector(".incValue");
+    const spanVal = li.querySelector(".inc-value");
     if (spanVal) {
       incomeTotal += parseFloat(spanVal.innerText);
       spanVal.nextElementSibling.innerText = curr;
@@ -112,54 +114,61 @@ const updateTotal = () => {
 
   let outcomeTotal = 0;
   Array.from(outcomeList.children).forEach((li) => {
-    const spanVal1 = li.querySelector(".outValue");
+    const spanVal1 = li.querySelector(".out-value");
     if (spanVal1) {
       outcomeTotal += parseFloat(spanVal1.innerText);
       spanVal1.nextElementSibling.innerText = curr;
     }
   });
-  totalIncome.innerHTML = `${incomeTotal} <span class="currencyCode">${curr}</span>`;
-  totalOutcome.innerHTML = `${outcomeTotal} <span class="currencyCode">${curr}</span>`;
-  moneyLeft.innerHTML = `${incomeTotal - outcomeTotal} <span class="currencyCode">${curr}</span>`;
+  totalIncome.innerHTML = `${incomeTotal} <span class="currency-code">${curr}</span>`;
+  totalOutcome.innerHTML = `${outcomeTotal} <span class="currency-code">${curr}</span>`;
+  moneyLeft.innerHTML = `${incomeTotal - outcomeTotal} <span class="currency-code">${curr}</span>`;
   const balance = incomeTotal - outcomeTotal;
   const title = document.querySelector("#title");
   title.innerHTML =
     balance < 0
-      ? `Stop spending money. You have nothing left!!! <br> Your current budget is ${balance} <span class="currencyCode">${curr}</span>`
+      ? `Stop spending money. You have nothing left!!! <br> Your current budget is ${balance} ${curr}`
       : `You have ${balance} ${curr} left`;
   document.querySelector("#title").style.color = balance < 0 ? "red" : "black";
+  updateCurrencyCodes(curr);
 };
 
 // Adding income item
 
-addIncBtn.addEventListener("click", () => {
-  const incomeType = document.querySelector("#incomeCategory").value;
-  const incomeList = document.querySelector(".incomeList");
-  const incomeValue = parseFloat(document.querySelector(".incomeValue").value);
+addIncBtn.addEventListener("click", (e) => {
+  if (isEditing) {
+    e.preventDefault();
+    alert("Please finish editing before adding a new income type.");
+  } else {
+    const incomeType = document.querySelector("#income-category").value;
+    const incomeList = document.querySelector(".income-list");
+    const incomeValue = parseFloat(
+      document.querySelector(".income-value").value
+    );
 
-  if (!isNaN(incomeValue) && incomeValue > 0) {
-    const li = document.createElement("li");
-    li.classList.add("listItems");
-    li.innerHTML = `
+    if (!isNaN(incomeValue) && incomeValue > 0) {
+      const li = document.createElement("li");
+      li.classList.add("list-items");
+      li.innerHTML = `
     <div class="${incomeType}">${incomeType}: 
     </div>
     <div class="incomeAmount">
-    <span class="incValue">${incomeValue}</span>
-    <span class="currencyCode"></span>
+    <span class="inc-value">${incomeValue}</span>
+    <span class="currency-code"></span>
     </div>
     <div>
       <i class="fa-regular fa-pen-to-square edit"></i>
       <i class="fa-regular fa-trash-can delete"></i>
     </div>`;
 
-    incomeList.appendChild(li);
-    document.querySelector(".dropDownIncome").value = "";
-    document.querySelector(".incomeValue").value = "";
+      incomeList.appendChild(li);
+      document.querySelector(".drop-down-income").value = "";
+      document.querySelector(".income-value").value = "";
 
-    updateTotal();
-    updateChartData();
-  } else {
-    alert("Please provide a valid amount");
+      updateTotal();
+    } else {
+      alert("Please provide a valid amount");
+    }
   }
 });
 
@@ -170,15 +179,16 @@ incomeList.addEventListener("click", (e) => {
     li.remove();
     updateTotal();
   } else if (e.target.classList.contains("edit")) {
+    isEditing = true;
     const li = e.target.closest("li");
     originalType = li.querySelector("div").classList[0];
-    originalValue = parseFloat(li.querySelector(".incValue").innerText);
+    originalValue = parseFloat(li.querySelector(".inc-value").innerText);
 
-    const incomeValue = li.querySelector(".incValue").innerText;
+    const incomeValue = li.querySelector(".inc-value").innerText;
     const dropdown = createIncomeDropdown(incomeTypes);
     const valueInput = document.createElement("input");
     valueInput.type = "text";
-    valueInput.classList.add("editValue");
+    valueInput.classList.add("edit-value");
     valueInput.value = incomeValue;
 
     const saveIcon = document.createElement("i");
@@ -188,54 +198,64 @@ incomeList.addEventListener("click", (e) => {
     li.appendChild(valueInput);
     li.appendChild(saveIcon);
   } else if (e.target.classList.contains("save")) {
-    const li = e.target.closest("li");
-    const newType = li.querySelector("#incomeCategory").value;
-    const newValue = parseFloat(li.querySelector(".editValue").value);
+    isEditing = false;
 
-    // Update the DOM and chart only if the new value is valid
+    const li = e.target.closest("li");
+    const newType = li.querySelector("#income-category").value;
+    const newValue = parseFloat(li.querySelector(".edit-value").value);
+
+    // Update the DOM and only if the new value is valid
     if (!isNaN(newValue) && newValue >= 0) {
       li.innerHTML = `
     <div class="${newType}"> ${newType}
-      <span class="incValue">${newValue.toFixed(2)}</span>
-      <span class="currencyCode"></span>
+      <span class="inc-value">${newValue.toFixed(2)}</span>
+      <span class="currency-code"></span>
     </div>
     <div>
       <i class="fa-regular fa-pen-to-square edit"></i>
       <i class="fa-regular fa-trash-can delete"></i>
     </div>`;
       updateTotal();
+    } else {
+      alert("Please provide a valid amount");
     }
   }
 });
 
 // Adding outcome item
-addOutBtn.addEventListener("click", () => {
-  const outcomeType = document.querySelector("#expenseCategory").value;
-  const outcomeList = document.querySelector(".outcomeList");
-  const outcomeValue = document.querySelector(".outcomeValue").value;
+addOutBtn.addEventListener("click", (e) => {
+  if (isEditing) {
+    e.preventDefault();
+    alert("Please finish editing before adding a new income type.");
+  } else {
+    const outcomeType = document.querySelector("#expense-category").value;
+    const outcomeList = document.querySelector(".outcome-list");
+    const outcomeValue = document.querySelector(".outcome-value").value;
 
-  if (!isNaN(outcomeValue) && outcomeValue > 0) {
-    const li = document.createElement("li");
-    li.classList.add("listItems");
+    if (!isNaN(outcomeValue) && outcomeValue > 0) {
+      const li = document.createElement("li");
+      li.classList.add("list-items");
 
-    li.innerHTML = `
+      li.innerHTML = `
     <div class="${outcomeType}">${outcomeType}: 
-      <span class="outValue">${outcomeValue}</span>
-      <span class="currencyCode"></span>
+      <span class="out-value">${outcomeValue}</span>
+      <span class="currency-code"></span>
     </div>
     <div>
       <i class="fa-regular fa-pen-to-square edit"></i>
       <i class="fa-regular fa-trash-can delete"></i>
     </div>`;
 
-    outcomeList.appendChild(li);
+      outcomeList.appendChild(li);
 
-    document.querySelector(".dropDownOutcome").value = "Groceries";
-    document.querySelector(".outcomeValue").value = "";
+      document.querySelector(".drop-down-outcome").value = "Groceries";
+      document.querySelector(".outcome-value").value = "";
 
-    updateTotal();
-  } else {
-    alert("Please provide a valid amount");
+      updateTotal();
+    } else {
+      alert("Please provide a valid amount");
+      console.log("podaj kwotę");
+    }
   }
 });
 
@@ -247,17 +267,18 @@ outcomeList.addEventListener("click", (e) => {
     li.remove();
     updateTotal();
   } else if (e.target.classList.contains("edit")) {
+    isEditing = true;
     const li = e.target.closest("li");
     const outcomeType =
-      li.querySelector(".outValue").previousSibling.textContent;
-    const outcomeValue = li.querySelector(".outValue").innerText;
+      li.querySelector(".out-value").previousSibling.textContent;
+    const outcomeValue = li.querySelector(".out-value").innerText;
 
     const dropdown = createOutcomeDropdown(outcomeTypes);
     const valueInput = document.createElement("input");
     valueInput.type = "text";
-    valueInput.classList.add("editValue");
+    valueInput.classList.add("edit-value");
     valueInput.value = outcomeValue;
-    const outcomeValue1 = li.querySelector(".outValue").innerText;
+    const outcomeValue1 = li.querySelector(".out-value").innerText;
     const saveIcon = document.createElement("i");
     saveIcon.classList.add("fa-regular", "fa-floppy-disk", "save");
     li.innerHTML = "";
@@ -265,22 +286,25 @@ outcomeList.addEventListener("click", (e) => {
     li.appendChild(valueInput);
     li.appendChild(saveIcon);
   } else if (e.target.classList.contains("save")) {
+    isEditing = false;
     const li = e.target.closest("li");
-    const newType = li.querySelector("#expenseCategory").value;
-    const newValue = parseFloat(li.querySelector(".editValue").value);
+    const newType = li.querySelector("#expense-category").value;
+    const newValue = parseFloat(li.querySelector(".edit-value").value);
     updateTotal();
 
     if (!isNaN(newValue) && newValue > 0) {
       li.innerHTML = `
       <div>${newType}: 
-        <span class="outValue">${newValue}</span>
-        <span class="currencyCode"></span>
+        <span class="out-value">${newValue}</span>
+        <span class="currency-code"></span>
       </div>
       <div>
         <i class="fa-regular fa-pen-to-square edit"></i>
         <i class="fa-regular fa-trash-can delete"></i>
       </div>`;
       updateTotal();
+    } else {
+      alert("Please provide a valid amoint");
     }
   }
 });
@@ -299,8 +323,8 @@ fetch("https://v6.exchangerate-api.com/v6/24f87096185677184d196bf1/latest/USD")
   })
   .then((data) => {
     const currList = Object.keys(data.conversion_rates);
-    const dropdown = document.getElementById("currencyCodesDropdown");
-    let curr = document.querySelector(".currencyCode");
+    const dropdown = document.getElementById("currency-codes-dropdown");
+    let curr = document.querySelector(".currency-code");
 
     currList.forEach((el) => {
       const option = document.createElement("option");
