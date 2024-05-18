@@ -33,10 +33,10 @@
   display: flex;
 }
 
-#moneyIn {
+#money-in {
   width: 50%;
 }
-#moneyOut {
+#money-out {
   width: 50%;
 }
 
@@ -72,13 +72,13 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-.incomeList,
-.outcomeList {
+.income-list,
+.outcome-list {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
-.listItems {
+.list-items {
   max-width: 90%;
   padding: 8px 16px;
   background: #f9f9f9;
@@ -87,22 +87,22 @@ input[type="submit"] {
   justify-content: space-between;
   align-items: baseline;
 }
-.listItems:hover {
+.list-items:hover {
   background-color: #ececec;
 }
-.listItems:nth-child(2n) {
+.list-items:nth-child(2n) {
   background-color: #e9e9e9;
   font-weight: bold;
 }
 
-.listItems:last-child {
+.list-items:last-child {
   border-bottom: none;
   border-radius: 0 0 4px 4px;
 }
 
-.outValue,
+.out-value,
 .outType,
-.incValue,
+.inc-value,
 .incType {
   font-family: "Times New Roman", Times, serif;
   font-size: 18px;
@@ -117,7 +117,7 @@ input[type="submit"] {
   justify-content: stretch;
 }
 
-.inputBlock {
+.input-block {
   display: flex;
 
   align-items: baseline;
@@ -126,12 +126,12 @@ input[type="submit"] {
   height: 44px;
 }
 
-#currencyCodesDropdown {
+#currency-codes-dropdown {
   width: 25%;
   margin: 5px auto;
 }
 
-.currencySelection {
+.currency-selection {
   margin: 25px auto 10px auto;
 }
 
@@ -140,9 +140,9 @@ input[type="submit"] {
   height: 300px;
 }
 
-.totalOutcome {
+.total-outcome {
   font-weight: bold;
 }
-.totalIncome {
+.total-income {
   font-weight: bold;
 }

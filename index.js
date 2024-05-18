@@ -127,8 +127,8 @@ const updateTotal = () => {
   const title = document.querySelector("#title");
   title.innerHTML =
     balance < 0
-      ? `Stop spending money. You have nothing left!!! <br> Your current budget is ${balance} ${curr}`
-      : `You have ${balance} ${curr} left`;
+      ? `Stop spending money. You have nothing left!!! <br> Your current budget is ${balance} <span class="currency-code">${curr}</span>`
+      : `You have ${balance} <span class="currency-code">${curr}</span> left`;
   document.querySelector("#title").style.color = balance < 0 ? "red" : "black";
   updateCurrencyCodes(curr);
 };
