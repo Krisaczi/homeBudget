@@ -17,44 +17,67 @@
     <title>Home Budget</title>
   </head>
   <body>
-    <div id="wrapper">
+    <div class="wrapper">
       <button id="refresh" class="btn btn-secondary">
         Restart calculation
       </button>
-      <div id="logo"></div>
+      <div class="logo"></div>
       <h3 class="currency-selection">Select your currency</h3>
-      <select id="currency-codes-dropdown">
+      <select id="cc-dropdown" class="currency-codes-dropdown">
         <option value=""></option>
       </select>
-      <h1 id="title">
+      <h1 id="title-summary" class="title">
         You have
-        <span id="money-left">0 <span class="currency-code"></span></span> left
+        <span id="budget-left" class="money-left"
+          >0 <span class="currency-code"></span
+        ></span>
+        left
       </h1>
-      <section id="money">
-        <div id="money-in">
-          <p>Total income: <span class="total-income">0</span></p>
+      <section class="money">
+        <div class="money-in">
+          <p>
+            Total income:
+            <span id="income-summary" class="total-income">0</span>
+          </p>
+
           <div class="input-block">
             <div class="drop-down-income"></div>
+
             <label for="income-value">Amount &nbsp;</label>
-            <input type="text" class="income-value" />
-            <button class="add-income btn btn-success addButton">
+            <input type="number" class="income-value" />
+            <button
+              id="income-add"
+              class="add-income btn btn-success addButton"
+            >
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>
-          <ul class="income-list list-group list-group-flush"></ul>
+          <ul
+            id="list-income"
+            class="income-list list-group list-group-flush"
+          ></ul>
         </div>
 
-        <div id="money-out">
-          <p>Total spent: <span class="total-outcome">0</span></p>
+        <div class="money-out">
+          <p>
+            Total spent:
+            <span id="outcome-summary" class="total-outcome">0</span>
+          </p>
           <div class="input-block">
             <div class="drop-down-outcome"></div>
             <label for="outcome-value">Amount &nbsp; </label>
-            <input type="text" class="outcome-value" />
-            <button class="add-outcome btn btn-success addButton">
+            <input type="number" class="outcome-value" />
+            <button
+              id="outcome-add"
+              class="add-outcome btn btn-success addButton"
+            >
               <i class="fa-solid fa-plus"></i>
             </button>
           </div>
-          <ul class="outcome-list list-group list-group-flush"></ul>
+          <ul
+            id="list-outcome"
+            class="outcome-list list-group list-group-flush"
+          ></ul>
         </div>
       </section>
     </div>

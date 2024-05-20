@@ -1,4 +1,4 @@
-#wrapper {
+.wrapper {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -6,15 +6,15 @@
       rgba(255, 255, 255, 0.7),
       rgba(255, 255, 255, 0.7)
     ),
-    url(/_7947e10c-6b5e-4dfd-a0b0-fba10f367f1a.jpg);
+    url(/background_image.jpg);
   background-size: cover;
   background-repeat: no-repeat;
 }
 
-#logo {
+.logo {
   width: 150px;
   height: 150px;
-  background-image: url(/_94e2ccac-00ef-4b79-bbf8-62212b889159.jpg);
+  background-image: url(/logo.jpg);
   background-size: contain;
   background-repeat: no-repeat;
   z-index: 4;
@@ -22,21 +22,21 @@
   margin: 0 auto;
 }
 
-#title {
+.title {
   margin: 0 auto 20px auto;
   text-align: center;
 }
-#money {
+.money {
   height: 750px;
   margin: 0 auto;
 
   display: flex;
 }
 
-#money-in {
+.money-in {
   width: 50%;
 }
-#money-out {
+.money-out {
   width: 50%;
 }
 
@@ -46,7 +46,7 @@
   margin-right: 0;
 }
 
-input[type="text"] {
+input[type="number"] {
   width: 25%;
   padding: 8px;
   margin: 5px 0 5px 0;
@@ -54,11 +54,13 @@ input[type="text"] {
   border: none;
   background: #868383;
   border-radius: 4px;
+  -moz-appearance: textfield;
 }
 
-input[type="text"]:focus {
+input[type="number"]:focus {
   background-color: #ebdcdc;
   outline: none;
+  -moz-appearance: textfield;
 }
 
 /* Style the submit button */
@@ -71,6 +73,11 @@ input[type="submit"] {
   border-radius: 4px;
   cursor: pointer;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 .income-list,
 .outcome-list {
@@ -78,8 +85,12 @@ input[type="submit"] {
   margin: 0;
   padding: 0;
 }
+
+.dropdown-item {
+  width: 175px;
+}
 .list-items {
-  max-width: 90%;
+  max-width: 80%;
   padding: 8px 16px;
   background: #f9f9f9;
   border-bottom: 1px solid #df1313;
@@ -87,9 +98,7 @@ input[type="submit"] {
   justify-content: space-between;
   align-items: baseline;
 }
-.list-items:hover {
-  background-color: #ececec;
-}
+
 .list-items:nth-child(2n) {
   background-color: #e9e9e9;
   font-weight: bold;
@@ -126,7 +135,7 @@ input[type="submit"] {
   height: 44px;
 }
 
-#currency-codes-dropdown {
+.currency-codes-dropdown {
   width: 25%;
   margin: 5px auto;
 }
@@ -135,14 +144,19 @@ input[type="submit"] {
   margin: 25px auto 10px auto;
 }
 
-#budgetChart {
-  width: 300px;
-  height: 300px;
-}
-
 .total-outcome {
   font-weight: bold;
 }
 .total-income {
   font-weight: bold;
+}
+
+@media (hover: hover) {
+  .list-items:hover {
+    background-color: #ececec;
+  }
+  .list-items:nth-child(2n):hover {
+    background-color: #ebdddd;
+    font-weight: bold;
+  }
 }

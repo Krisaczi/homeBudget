@@ -1,50 +1,33 @@
-const addIncBtn = document.querySelector(".add-income");
-const addOutBtn = document.querySelector(".add-outcome");
-const incomeList = document.querySelector(".income-list");
-const outcomeList = document.querySelector(".outcome-list");
-const moneyLeft = document.querySelector("#money-left");
-const totalIncome = document.querySelector(".total-income");
-const totalOutcome = document.querySelector(".total-outcome");
+const addIncBtn = document.querySelector("#income-add");
+const addOutBtn = document.querySelector("#outcome-add");
+const incomeList = document.querySelector("#list-income");
+const outcomeList = document.querySelector("#list-outcome");
+const moneyLeft = document.querySelector("#budget-left");
+const totalIncome = document.querySelector("#income-summary");
+const totalOutcome = document.querySelector("#outcome-summary");
 const refreshBtn = document.querySelector("#refresh");
 let isEditing = false;
-
-let salaryTotal = 0;
-let businessTotal = 0;
-let salesTotal = 0;
-let dividendsTotal = 0;
-let rentIncomeTotal = 0;
-let freelanceTotal = 0;
-let otherTotal = 0;
-
-let groceriesTotal = 0;
-let rentTotal = 0;
-let mediaTotal = 0;
-let internetTotal = 0;
-let PhonesTotal = 0;
-let entertainmentTotal = 0;
-let diningOutTotal = 0;
-let carTotal = 0;
 let originalType = null;
 let originalValue = 0;
+
 let incomeTypes = [
-  { type: "Salary", total: salaryTotal },
-  { type: "Business", total: businessTotal },
-  { type: "Sales", total: salesTotal },
-  { type: "Dividends", total: dividendsTotal },
-  { type: "RentIncome", total: rentIncomeTotal },
-  { type: "Freelance", total: freelanceTotal },
-  { type: "Other", total: otherTotal },
+  "Salary",
+  "Business",
+  "Sales",
+  "Dividends",
+  "RentIncome",
+  "Other",
 ];
 
 const outcomeTypes = [
-  { type: "Groceries", total: groceriesTotal },
-  { type: "Rent", total: rentTotal },
-  { type: "Media", total: mediaTotal },
-  { type: "Internet", total: internetTotal },
-  { type: "Phones", total: PhonesTotal },
-  { type: "Entertainment", total: entertainmentTotal },
-  { type: "Diningout", total: diningOutTotal },
-  { type: "Car", total: carTotal },
+  "Groceries",
+  "Rent",
+  "Media",
+  "Internet",
+  "Phones",
+  "Entertainment",
+  "Diningout",
+  "Car",
 ];
 //Reset calculation
 refreshBtn.addEventListener("click", () => {
@@ -60,8 +43,8 @@ function createIncomeDropdown(array) {
 
   array.map((item) => {
     const optionElement = document.createElement("option");
-    optionElement.value = item.type;
-    optionElement.textContent = item.type;
+    optionElement.value = item;
+    optionElement.textContent = item;
     selectElement.appendChild(optionElement);
   });
 
@@ -77,8 +60,8 @@ function createOutcomeDropdown(array) {
 
   array.forEach((item) => {
     const optionElement = document.createElement("option");
-    optionElement.value = item.type;
-    optionElement.textContent = item.type;
+    optionElement.value = item;
+    optionElement.textContent = item;
     selectElement.appendChild(optionElement);
   });
 
@@ -123,13 +106,14 @@ const updateTotal = () => {
   totalIncome.innerHTML = `${incomeTotal} <span class="currency-code">${curr}</span>`;
   totalOutcome.innerHTML = `${outcomeTotal} <span class="currency-code">${curr}</span>`;
   moneyLeft.innerHTML = `${incomeTotal - outcomeTotal} <span class="currency-code">${curr}</span>`;
-  const balance = incomeTotal - outcomeTotal;
-  const title = document.querySelector("#title");
+  const balance = (incomeTotal - outcomeTotal).toFixed(2);
+  const title = document.querySelector("#title-summary");
   title.innerHTML =
     balance < 0
       ? `Stop spending money. You have nothing left!!! <br> Your current budget is ${balance} <span class="currency-code">${curr}</span>`
       : `You have ${balance} <span class="currency-code">${curr}</span> left`;
-  document.querySelector("#title").style.color = balance < 0 ? "red" : "black";
+  document.querySelector("#title-summary").style.color =
+    balance < 0 ? "red" : "black";
   updateCurrencyCodes(curr);
 };
 
@@ -153,7 +137,7 @@ addIncBtn.addEventListener("click", (e) => {
     <div class="${incomeType}">${incomeType}: 
     </div>
     <div class="incomeAmount">
-    <span class="inc-value">${incomeValue}</span>
+    <span class="inc-value">${incomeValue.toFixed(2)}</span>
     <span class="currency-code"></span>
     </div>
     <div>
@@ -187,7 +171,7 @@ incomeList.addEventListener("click", (e) => {
     const incomeValue = li.querySelector(".inc-value").innerText;
     const dropdown = createIncomeDropdown(incomeTypes);
     const valueInput = document.createElement("input");
-    valueInput.type = "text";
+    valueInput.type = "number";
     valueInput.classList.add("edit-value");
     valueInput.value = incomeValue;
 
@@ -199,22 +183,23 @@ incomeList.addEventListener("click", (e) => {
     li.appendChild(saveIcon);
   } else if (e.target.classList.contains("save")) {
     isEditing = false;
-
     const li = e.target.closest("li");
     const newType = li.querySelector("#income-category").value;
     const newValue = parseFloat(li.querySelector(".edit-value").value);
 
     // Update the DOM and only if the new value is valid
-    if (!isNaN(newValue) && newValue >= 0) {
+    if (!isNaN(newValue) && newValue > 0) {
       li.innerHTML = `
-    <div class="${newType}"> ${newType}
+      <div class="${newType}">${newType}: 
+      </div>
+      <div class="incomeAmount">
       <span class="inc-value">${newValue.toFixed(2)}</span>
       <span class="currency-code"></span>
-    </div>
-    <div>
-      <i class="fa-regular fa-pen-to-square edit"></i>
-      <i class="fa-regular fa-trash-can delete"></i>
-    </div>`;
+      </div>
+      <div>
+        <i class="fa-regular fa-pen-to-square edit"></i>
+        <i class="fa-regular fa-trash-can delete"></i>
+      </div>`;
       updateTotal();
     } else {
       alert("Please provide a valid amount");
@@ -230,21 +215,25 @@ addOutBtn.addEventListener("click", (e) => {
   } else {
     const outcomeType = document.querySelector("#expense-category").value;
     const outcomeList = document.querySelector(".outcome-list");
-    const outcomeValue = document.querySelector(".outcome-value").value;
+    const outcomeValue = parseFloat(
+      document.querySelector(".outcome-value").value
+    );
 
     if (!isNaN(outcomeValue) && outcomeValue > 0) {
       const li = document.createElement("li");
       li.classList.add("list-items");
 
       li.innerHTML = `
-    <div class="${outcomeType}">${outcomeType}: 
-      <span class="out-value">${outcomeValue}</span>
+      <div class="${outcomeType}">${outcomeType}: 
+      </div>
+      <div class="outcomeAmount">
+      <span class="out-value">${outcomeValue.toFixed(2)}</span>
       <span class="currency-code"></span>
-    </div>
-    <div>
-      <i class="fa-regular fa-pen-to-square edit"></i>
-      <i class="fa-regular fa-trash-can delete"></i>
-    </div>`;
+      </div>
+      <div>
+        <i class="fa-regular fa-pen-to-square edit"></i>
+        <i class="fa-regular fa-trash-can delete"></i>
+      </div>`;
 
       outcomeList.appendChild(li);
 
@@ -254,7 +243,6 @@ addOutBtn.addEventListener("click", (e) => {
       updateTotal();
     } else {
       alert("Please provide a valid amount");
-      console.log("podaj kwotę");
     }
   }
 });
@@ -263,22 +251,21 @@ addOutBtn.addEventListener("click", (e) => {
 outcomeList.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
     const li = e.target.closest("li");
-
     li.remove();
     updateTotal();
   } else if (e.target.classList.contains("edit")) {
     isEditing = true;
     const li = e.target.closest("li");
-    const outcomeType =
-      li.querySelector(".out-value").previousSibling.textContent;
-    const outcomeValue = li.querySelector(".out-value").innerText;
+    originalType = li.querySelector("div").classList[0];
+    originalValue = parseFloat(li.querySelector(".out-value").innerText);
 
+    const outcomeValue = li.querySelector(".out-value").innerText;
     const dropdown = createOutcomeDropdown(outcomeTypes);
     const valueInput = document.createElement("input");
-    valueInput.type = "text";
+    valueInput.type = "number";
     valueInput.classList.add("edit-value");
     valueInput.value = outcomeValue;
-    const outcomeValue1 = li.querySelector(".out-value").innerText;
+
     const saveIcon = document.createElement("i");
     saveIcon.classList.add("fa-regular", "fa-floppy-disk", "save");
     li.innerHTML = "";
@@ -290,18 +277,19 @@ outcomeList.addEventListener("click", (e) => {
     const li = e.target.closest("li");
     const newType = li.querySelector("#expense-category").value;
     const newValue = parseFloat(li.querySelector(".edit-value").value);
-    updateTotal();
 
     if (!isNaN(newValue) && newValue > 0) {
       li.innerHTML = `
-      <div>${newType}: 
-        <span class="out-value">${newValue}</span>
-        <span class="currency-code"></span>
-      </div>
-      <div>
-        <i class="fa-regular fa-pen-to-square edit"></i>
-        <i class="fa-regular fa-trash-can delete"></i>
-      </div>`;
+      <div class="${newType}">${newType}: 
+    </div>
+    <div class="outcomeAmount">
+    <span class="out-value">${newValue.toFixed(2)}</span>
+    <span class="currency-code"></span>
+    </div>
+    <div>
+      <i class="fa-regular fa-pen-to-square edit"></i>
+      <i class="fa-regular fa-trash-can delete"></i>
+    </div>`;
       updateTotal();
     } else {
       alert("Please provide a valid amoint");
@@ -323,7 +311,7 @@ fetch("https://v6.exchangerate-api.com/v6/24f87096185677184d196bf1/latest/USD")
   })
   .then((data) => {
     const currList = Object.keys(data.conversion_rates);
-    const dropdown = document.getElementById("currency-codes-dropdown");
+    const dropdown = document.getElementById("cc-dropdown");
     let curr = document.querySelector(".currency-code");
 
     currList.forEach((el) => {
@@ -335,7 +323,6 @@ fetch("https://v6.exchangerate-api.com/v6/24f87096185677184d196bf1/latest/USD")
     dropdown.addEventListener("change", function () {
       curr.textContent = this.value;
       updateCurrencyCodes(this.value);
-      //updateTotal();
     });
   })
 
